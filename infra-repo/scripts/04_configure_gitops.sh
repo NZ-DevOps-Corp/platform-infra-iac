@@ -9,7 +9,7 @@ set -euo pipefail
 NEW_ARGOCD_PASSWORD="admin000" 
 # Replace with your actual GitHub username and the PAT you created earlier
 GITHUB_USERNAME="irfan84" 
-GITHUB_PAT="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" 
+GITHUB_PAT="" 
 # This is the URL of your infra-repo on GitHub
 REPO_URL="https://github.com/irfan84/nz-k8s-devops-project.git" 
 # --- END CONFIGURATION ---
