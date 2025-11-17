@@ -7,12 +7,16 @@ set -euo pipefail
 # --- CONFIGURATION (UPDATE THESE VALUES) ---
 # Replace with the password you want for the 'admin' user.
 NEW_ARGOCD_PASSWORD="admin000" 
-# Replace with your actual GitHub username and the PAT you created earlier
-GITHUB_USERNAME="irfan84" 
-GITHUB_PAT="" 
 # This is the URL of your infra-repo on GitHub
 REPO_URL="https://github.com/irfan84/nz-k8s-devops-project.git" 
 # --- END CONFIGURATION ---
+
+# 1. Check for Required Environment Variables
+if [ -z "$GITHUB_USERNAME" ] || [ -z "$GITHUB_PAT" ]; then
+    echo "ERROR: GITHUB_USERNAME and GITHUB_PAT environment variables must be exported before running this script."
+    exit 1
+fi
+# ... (rest of the script remains the same, but remove the line where GITHUB_USERNAME and GITHUB_PAT were set)
 
 # 1. Install ArgoCD CLI (if not already installed)
 echo "--- 1. Installing ArgoCD CLI ---"
