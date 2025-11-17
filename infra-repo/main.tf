@@ -60,10 +60,7 @@ resource "azurerm_monitor_diagnostic_setting" "aks_diagnostics" {
     content {
       category = log.value
       enabled  = true
-      retention_policy {
-        enabled = true
-        days    = 30
-      }
+      # Retention is now managed by the Log Analytics Workspace (log_workspace resource)
     }
   }
 
@@ -71,9 +68,6 @@ resource "azurerm_monitor_diagnostic_setting" "aks_diagnostics" {
   metric {
     category = "AllMetrics"
     enabled  = true
-    retention_policy {
-      enabled = true
-      days    = 30
-    }
+    # Retention is now managed by the Log Analytics Workspace (log_workspace resource)
   }
 }
