@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-# --- CONFIGURATION (UPDATE THESE VALUES) ---
+## --- CONFIGURATION (UPDATE THESE VALUES) ---
 # Replace with the password you want for the 'admin' user.
 NEW_ARGOCD_PASSWORD="admin000" 
 # This is the URL of your infra-repo on GitHub
