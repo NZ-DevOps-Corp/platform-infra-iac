@@ -59,7 +59,6 @@ resource "azurerm_monitor_diagnostic_setting" "aks_diagnostics" {
     for_each = ["kube-audit", "kube-apiserver", "kube-controller-manager", "kube-scheduler", "cluster-autoscaler"]
     content {
       category = enabled_log.value
-      enabled  = true
       # Retention is now managed by the Log Analytics Workspace (log_workspace resource)
     }
   }
