@@ -9,7 +9,7 @@ variable "location" {
 variable "project_name" {
   description = "A short name for the project, used to prefix resource names."
   type        = string
-  default     = "aksgitops"
+  default     = "aksgitopsirf84"
 }
 
 variable "environments" {
