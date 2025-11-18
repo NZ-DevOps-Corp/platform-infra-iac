@@ -21,7 +21,14 @@ fi
 # 2. Set ArgoCD CLI Options (Requires port-forward to be running in a separate terminal)
 export ARGOCD_OPTS="--insecure --port-forward --port-forward-namespace argocd"
 
-echo "--- 3. Creating ArgoCD Application Link ---"
+echo "--- 3. Registering Application Configuration Repository (nz-k8s-app-config) ---"
+# This registers the new private repository with ArgoCD using the PAT.
+argocd repo add "$REPO_URL" \
+    --username "$GITHUB_USERNAME" \
+    --password "$GITHUB_PAT" \
+    --upsert # The --upsert flag updates the repo if it already exists
+
+echo "--- 4. Creating ArgoCD Application Link ---"
 # This command tells ArgoCD to monitor your new GitOps repository
 argocd app create aks-web-app \
   --repo "$REPO_URL" \
