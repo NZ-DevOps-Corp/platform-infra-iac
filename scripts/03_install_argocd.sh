@@ -1,13 +1,19 @@
-# File: infra-repo/scripts/03_install_argocd.sh
+# File: scripts/03_install_argocd.sh
 
 #!/bin/bash
 # Script to connect to the new AKS cluster and install ArgoCD (GitOps Engine)
 
 set -euo pipefail
 
-# --- Configuration Variables (Adjust if you changed project_name) ---
-RESOURCE_GROUP="rg-aksgitopsirf84-dev"
-AKS_NAME="aks-aksgitopsirf84-dev"
+# --- Configuration Variables (UPDATED TO REFLECT MODULAR NAMING) ---
+# NOTE: Update these variables to match the values in your envs/dev/variables.tf
+PROJECT_NAME="aksgitops"
+ENVIRONMENT="dev" 
+
+# The Resource Group holding the VNet/Subnets (defined in envs/dev/main.tf)
+RESOURCE_GROUP="rg-${PROJECT_NAME}-net-${ENVIRONMENT}" 
+# The AKS Cluster Name (defined in modules/aks-cluster/main.tf)
+AKS_NAME="aks-${PROJECT_NAME}-${ENVIRONMENT}" 
 
 echo "--- 1. Retrieving AKS Credentials and merging into kubeconfig ---"
 # Downloads the necessary certificates and connection details for kubectl
