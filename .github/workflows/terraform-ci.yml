@@ -1,0 +1,58 @@
+name: Terraform CI/Plan - OIDC Secure
+
+on:
+  pull_request:
+    branches: [ main ]
+  # Allows manual runs for testing
+  workflow_dispatch:
+
+jobs:
+  terraform_plan:
+    runs-on: ubuntu-latest
+    environment: Development # Use a GitHub Environment for visibility
+
+    # 🌟 CRITICAL: OIDC Permission
+    permissions:
+      id-token: write  # Required to request the OIDC JWT from GitHub
+      contents: read   # Required to check out the repository code
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 1. Secure Azure Login using OIDC
+      - name: Azure Login (OIDC) 
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          # OIDC: The action exchanges the GitHub JWT for an Azure Access Token
+          # This token is temporary and assigned to the runner environment
+
+      - name: Setup Terraform CLI
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.x
+
+      - name: Terraform Init - Dev Environment
+        run: terraform init -backend-config="env=dev"
+        working-directory: ./envs/dev  # Run init from the Dev environment folder
+        # Note: We will use the 'env' tag in the backend key for separation
+
+      - name: Terraform Plan - Dev Environment
+        id: plan
+        run: terraform plan -no-color
+        working-directory: ./envs/dev 
+        
+      - name: Post Plan to PR
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## Terraform Plan Output (Dev):\n\n\`\`\`\n${{ steps.plan.outputs.stdout }}\n\`\`\``
+            })
